@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>组件的ref和事件绑定</title>
+</head>
+<body>
+    <div id="app01"></div>
+    <div id="app02"></div>
+</body>
+<script type="text/javascript" src="../../common/js/react.development.js"></script>
+<script type="text/javascript" src="../../common/js/react-dom.development.js"></script>
+<script type="text/javascript" src="../../common/js/babel.min.js"></script>
+
+<script type="text/babel">
+    // 1.创建组件
+    class MyComponent extends React.Component{
+
+        info(){
+            alert(this.refs.second.value)
+        }
+
+        handBlur(event){
+            alert(event.target.value)
+        }
+
+        render(){
+            /**
+             * React提供的这个ref属性，表示为对组件真正实例的引用，其实就是ReactDOM.render()返回的组件实例；
+             *
+                 ReactDOM.render()渲染组件时返回的是组件实例；
+                 渲染dom元素时，返回是具体的dom节点。
+                 ref可以挂载到组件上也可以是dom元素上；
+
+                 挂到组件(class声明的组件)上的ref表示对组件实例的引用。不能在函数式组件上使用 ref 属性，因为它们没有实例：
+                 挂载到dom元素上时表示具体的dom元素节点。
+
+                早期是ref可以设置字符串，然后通过this.refs.字符串名来获取这个实例
+             */
+            return <div>
+                <input type="text" ref='firstInput'/>
+                <input type="text" ref='second'/>
+                <button onClick={()=>{this.info()}}>提示输入信息</button>
+                <input type="text" placeholder="失去焦点提示" onBlur={this.handBlur}/>
+            </div>
+        }
+    }
+    ReactDOM.render(<MyComponent/>,document.getElementById('app01'))
+</script>
+
+<script type="text/babel">
+    // 1.创建组件
+    class MyComponent02 extends React.Component{
+
+        info(){
+            alert(this.first.value)
+        }
+
+        handBlur01(event){
+            alert(event.target.value)
+        }
+        render(){
+            /**
+             * 先阶段的官方强烈推荐ref属性设置为一个回调函数，
+             * 当组件被挂载后，回调函数被立即执行，回调函数的参数为该组件的具体实例(也可以是具体的dom元素)
+             * 下面的firstInput=>{this.first = firstInput表示将当前实例对象赋给first属性，
+             * 可以这样理解，相当于MyComponent02这个组件对象有一个名为first的属性，该属性值就是
+             * ref指向的实例。以后想要获取这个实例，只需要通过this，属性名就可以
+             */
+            /**
+             * react的事件绑定和js的区别在于第二个单词的首字母大写
+             */
+            return <div>
+                <input type="text" ref={firstInput=>{this.first = firstInput}}/>
+                <input type="text" ref={input=>{this.input = input}}/>
+                <button onClick={()=>{this.info()}}>提示输入信息</button>
+                <input type="text" placeholder="失去焦点提示" onBlur={this.handBlur01}/>
+            </div>
+        }
+    }
+    ReactDOM.render(<MyComponent02/>,document.getElementById('app02'))
+</script>
+</html>

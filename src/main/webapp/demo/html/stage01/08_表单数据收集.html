@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>表单数据收集</title>
+</head>
+<body>
+    <div id="app01"></div>
+</body>
+<script type="text/javascript" src="../../common/js/react.development.js"></script>
+<script type="text/javascript" src="../../common/js/react-dom.development.js"></script>
+<script type="text/javascript" src="../../common/js/babel.min.js"></script>
+
+<script type="text/babel">
+    // 创建组件对象
+    class Form extends React.Component{
+
+        constructor(){
+            super();
+            this.state = {
+                pwd:''
+            }
+            this.handlerChange = this.handlerChange.bind(this)
+            this.doSub = this.doSub.bind(this)
+        }
+
+        doSub(event){
+            // 获取用户名
+            var username = this.name.value;
+            alert('准备提交的用户名为:'+username+',密码为:'+this.state.pwd)
+            // 阻止事件的默认行为
+            event.preventDefault();
+        }
+
+        handlerChange(event){
+            var content = event.target.value;
+            this.setState({
+                pwd:content
+            })
+        }
+
+        render(){
+            /**
+             * 注意如果使用this.state.pwd方式时，密码框是不能输入的，因为
+             react是单数据流，状态不能该直接改变，所有不能输入，实际上输入的值是
+             被状态中的值给覆盖掉了，想要让输入框能够输入密码，可以通过onChange
+             事件进行重新赋值，注意；在传统的js中onchange函数只有在失去
+             焦点时才会触发，而react的onChange函数则是当值发生改变时触发
+             */
+            return (
+                <form action="/test" onSubmit={this.doSub}>
+                    用户名:<input type="text" placeholder="请输入用户名" ref={input=>this.name=input}/>
+                    密码:<input type="password" placeholder="请输入密码"
+                              value={this.state.pwd} onChange={this.handlerChange}/>
+                    <input type="submit"/>
+                </form>
+            )
+        }
+    }
+
+    // 渲染数据
+    ReactDOM.render(<Form/>, document.getElementById('app01'))
+</script>
+</html>

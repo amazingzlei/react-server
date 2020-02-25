@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>jsx的使用</title>
+    <style>
+        .app01{
+            color:red
+        }
+        .app02{
+            color:green;
+        }
+        .app03{
+            list-style: none;
+            font-size: 16px;
+            color:pink;
+        }
+    </style>
+</head>
+<body>
+    <!--
+        1)	全称:  JavaScript XML
+        2)	react定义的一种类似于XML的JS扩展语法: XML+JS
+        3)	作用: 用来创建react虚拟DOM(元素)对象
+            a.	var ele = <h1>Hello JSX!</h1>
+            b.	注意1: 它不是字符串, 也不是HTML/XML标签
+            c.	注意2: 它最终产生的就是一个JS对象
+        4)	标签名任意: HTML标签或其它自定义的标签
+        5)	标签属性任意: HTML标签属性或其他自定义属性
+        6)	基本语法规则
+            a.	遇到 <开头的代码, 以标签的语法解析: html同名标签转换为html同名元素, 其它标签需要特别解析
+            b.	遇到以 { 开头的代码，以JS语法解析: 标签中的js代码必须用{ }包含
+        7)	babel.js的作用
+            a.	浏览器不能直接解析JSX代码, 需要babel转译为纯JS的代码才能运行
+            b.	只要用了JSX，都要加上type="text/babel", 声明需要babel来处理
+    -->
+    <div id="app01"></div>
+    <div id="app02"></div>
+    <div id="app03"></div>
+</body>
+<script type="text/javascript" src="../../common/js/react.development.js"></script>
+<script type="text/javascript" src="../../common/js/react-dom.development.js"></script>
+<script type="text/javascript" src="../../common/js/babel.min.js"></script>
+<script type="text/javascript">
+    var id = 'zEnglei';
+    var content = 'From Yangzhou'
+    // 使用原始的方式创建虚拟dom 参数:标签名 标签属性 标签体内容
+    // 原始的js方式比较笨重不建议使用
+    var vDom = React.createElement('h1',{id:id.toUpperCase(),className:'app01'},content.toUpperCase())
+    // 渲染数据
+    ReactDOM.render(vDom, document.getElementById("app01"))
+</script>
+
+<script type="text/babel">
+    // 采用jsx方式创建虚拟dom
+    var vDom = <h2 id={id.toLowerCase()} className="app02">{content.toLowerCase()}</h2>
+    // 渲染数据
+    ReactDOM.render(vDom,document.getElementById('app02'))
+
+    var names = ['扬州','苏州','常州','徐州','泰州'];
+    // 如果涉及到dom元素的嵌套则推荐使用()包裹
+    // 在jsx中如果需要引用变量，则使用{}包裹
+    var vDom02 = (
+        <ul>{names.map((name,index)=><li key={index} className="app03">{name}</li>)}</ul>
+    )
+    ReactDOM.render(vDom02,document.getElementById('app03'))
+</script>
+</html>

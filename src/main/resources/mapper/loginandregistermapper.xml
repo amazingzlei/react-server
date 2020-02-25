@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fh.project.dao.LoginAndRegisterDao">
+
+    <select id="hasUser" resultType="com.fh.project.vo.User">
+        select * from user where username = #{username}
+    </select>
+
+    <insert id="insertUser" useGeneratedKeys="true" keyProperty="id">
+        insert into user(username,password,updateTime,type) values(#{username},#{password},#{updateTime},#{type})
+    </insert>
+
+    <insert id="insertBoss">
+        insert into bossinfo value(#{id},#{img},#{job},#{company},#{salary},#{desc})
+    </insert>
+
+    <insert id="insertEmp">
+        insert into employeeinfo value(#{id},#{img},#{job},#{desc})
+    </insert>
+
+    <select id="getBossInfo" resultType="com.fh.project.vo.BossInfo">
+        select * from bossinfo where id = #{id}
+    </select>
+
+    <select id="getEmpInfo" resultType="com.fh.project.vo.EmployeeInfo">
+        select * from employeeinfo where id = #{id}
+    </select>
+
+    <select id="getUserById" resultType="com.fh.project.vo.User">
+        select * from user where id = #{id}
+    </select>
+
+    <select id="getAllBoss" resultType="com.fh.project.vo.BossInfo">
+        select * from bossinfo
+    </select>
+
+    <select id="getAllEmp" resultType="com.fh.project.vo.EmployeeInfo">
+        select * from employeeinfo
+    </select>
+
+    <insert id="addChat">
+        insert into chat values(#{id},#{from},#{to},#{time},#{content},#{status})
+    </insert>
+
+    <select id="getMsgList" resultType="com.fh.project.vo.MessageVo">
+        select * from chat where id=#{id} order by time
+    </select>
+
+    <select id="getAllChatUserId" resultType="java.lang.String">
+        select `from` from chat where `to`=#{id}
+        union
+        select `to` from chat where `from`=#{id}
+    </select>
+
+    <select id="getUnRead" resultType="Integer">
+        select count(1) from chat where id=#{id} and `from`=#{from}  and status=0
+    </select>
+
+    <update id="updateStatus">
+        update chat set status=1 where id=#{id} and `from`=#{from}
+    </update>
+</mapper>

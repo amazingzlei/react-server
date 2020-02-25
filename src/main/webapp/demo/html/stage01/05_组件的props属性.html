@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>props属性</title>
+</head>
+<body>
+    <div id="app01"></div>
+    <div id="app02"></div>
+    <div id="app03"></div>
+    <div id="app04"></div>
+</body>
+<script type="text/javascript" src="../../common/js/react.development.js"></script>
+<script type="text/javascript" src="../../common/js/react-dom.development.js"></script>
+<script type="text/javascript" src="../../common/js/babel.min.js"></script>
+<script type="text/javascript" src="../../common/js/prop-types.js"></script>
+
+<script type="text/babel">
+    // 1.创建组件
+    function Person(props) {
+        return (
+            <ul>
+                <li>{props.name}</li>
+                <li>{props.age}</li>
+                <li>{props.sex}</li>
+            </ul>
+        )
+    }
+    var p1 = {name:'张三',age:20,sex:'男'}
+    // 2.渲染数据
+    /**
+     * 下面这种传props的方式比较复杂，如果有多个属性则需要一一列举
+     */
+    //ReactDOM.render(<Person name={p1.name} age={p1.age} sex={p1.sex} address={p1.address}/>, document.getElementById("app01"))
+    /**
+     * 下面这种方面通过es6的新语法来对参数进行打包，这样在组件中会进行自定解包
+     */
+    ReactDOM.render(<Person {...p1}/>, document.getElementById("app01"))
+    /**
+     * 注意:p1中的属性名必须和组件中引用的属性名保持一致，否则无法渲染数据，如果在
+     * ReactDOM.render时添加p1不存在的属性时，不会报错
+     */
+</script>
+
+<script type="text/babel">
+    // react自带了对props属性的校验和默认值的设置方法，实现方式如下
+    // 1.创建组件
+    function Person02(props) {
+        return (
+            <ul>
+                <li>{props.name}</li>
+                <li>{props.age}</li>
+                <li>{props.sex}</li>
+            </ul>
+        )
+    }
+    // 对组件设置默认值
+    Person02.defaultProps = {
+        age: 18,
+        sex: '女'
+    }
+    // 对组件值进行校验
+    Person02.propTypes = {
+        age: PropTypes.number.isRequired,
+        sex: PropTypes.string.isRequired,
+        name: PropTypes.string.isRequired,
+    }
+    // 渲染数据
+    var p2= {name:'李娜'}
+    ReactDOM.render(<Person02 {...p2}/>, document.getElementById("app02"))
+</script>
+
+<script type="text/babel">
+    // 采用类方式创建组件
+    class Person03 extends React.Component{
+        render(){
+            return <ul>
+                <li>{this.props.name}</li>
+                <li>{this.props.age}</li>
+                <li>{this.props.sex}</li>
+            </ul>
+        }
+    }
+    // 渲染数据
+    var p3 = {name:'王五',age:20,sex:'男'}
+    ReactDOM.render(<Person03 {...p1}/>, document.getElementById('app03'))
+</script>
+
+<script type="text/babel">
+
+    class Person04 extends React.Component{
+
+        render(){
+            var params = this.props.params;
+            return params.map(function (prop,index) {
+                return (
+                    <ul key={index}>
+                        <li>{prop.name}</li>
+                        <li>{prop.age}</li>
+                        <li>{prop.sex}</li>
+                    </ul>
+                )
+            })
+        }
+    }
+
+    var p4 = [{name:'张三',age:20,sex:'男'},{name:'李娜',age:20,sex:'女'}]
+    ReactDOM.render(<Person04 params={p4}/>, document.getElementById('app04'))
+</script>
+</html>

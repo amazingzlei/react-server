@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>组件的组合</title>
+</head>
+<body>
+    <div id="app01"></div>
+</body>
+<script type="text/javascript" src="../../common/js/react.development.js"></script>
+<script type="text/javascript" src="../../common/js/react-dom.development.js"></script>
+<script type="text/javascript" src="../../common/js/babel.min.js"></script>
+<script type="text/javascript" src="../../common/js/prop-types.js"></script>
+
+
+<script type="text/babel">
+
+    // 父组件
+    class Parent extends React.Component{
+
+        constructor(props){
+            super(props);
+            // 初始化状态
+            this.state = {
+                todoList:['扬州','苏州','南京','常州']
+            }
+            this.addTodo = this.addTodo.bind(this)
+        }
+
+        // 实际的更新函数放在父组件中
+        addTodo(content){
+            // 这个地方不能够写成var todoList = this.state.todoList.unshift(content)，
+            // 因为不能够直接操作状态
+            var todoList = this.state.todoList;
+            todoList.unshift(content)
+            this.setState({
+                todoList:todoList
+            })
+        }
+
+        render(){
+            console.log(this.state.todoList)
+            var todoList = this.state.todoList;
+            // 将更新函数作为参数传给子组件
+            return (
+                <div>
+                    <Add length={todoList.length+1} addItem={this.addTodo}/>
+                    <List todoList={todoList}/>
+                </div>
+            )
+        }
+    }
+
+    // 子组件-添加
+    class Add extends React.Component{
+
+        add(){
+            var content = this.input.value;
+            // 从属性中读取函数
+            this.props.addItem(content);
+
+            this.input.value = '';
+        }
+
+        render(){
+            return (
+                <div>
+                    <input type="text" placeholder="请输入内容"
+                           ref={input=>this.input=input}/>
+                    <button onClick={()=>this.add()}>add #{this.props.length}</button>
+                </div>
+            )
+        }
+    }
+
+    // 子组件-列表
+    class List extends React.Component{
+        render(){
+            return (
+                <ul>
+                    {this.props.todoList.map(function (todo,index) {
+                        return <li key={index}>{todo}</li>
+                    })}
+                </ul>
+            )
+        }
+    }
+
+    // 渲染
+    ReactDOM.render(<Parent/>, document.getElementById('app01'))
+
+    /**
+     * 多组件组合使用总结
+     * 1.关于数据问题
+     *  看数据是哪一个组件需要，如果是多个组件需要则放入父组件中，如果只是
+     *  单个组件使用，则直接放在该组件中即可
+     * 2.关于子组件改变父组件状态问题
+     *  首先我们需要明确子组件不能直接改变父组件的状态
+     *  所有状态在哪个组件中，更新状态的行为(函数)就应该放在哪一个组件中
+     *  因此想要让子组件改变父组件的状态时，实际的更新函数应该放在父组件中
+     *  ，然后将该函数作为参数传给子组件，子组件获取函数调用
+     */
+</script>
+</html>

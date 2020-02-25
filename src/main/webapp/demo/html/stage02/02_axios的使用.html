@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>axios的使用</title>
+</head>
+<body>
+    <div id="app01"></div>
+    <hr>
+    <div id="app02"></div>
+</body>
+<script type="text/javascript" src="../../common/js/react.development.js"></script>
+<script type="text/javascript" src="../../common/js/react-dom.development.js"></script>
+<script type="text/javascript" src="../../common/js/babel.min.js"></script>
+<script type="text/javascript" src="../../common/js/axios.min.js"></script>
+
+<script type="text/babel">
+
+    class Table extends React.Component{
+
+        state = {
+            cars:[]
+        }
+
+        componentDidMount(){
+            var url = 'http://localhost:8090/react/getCar'
+            axios.get(url).then((data)=>{
+                var cars = data.data.data;
+                this.setState({cars})
+            }).catch((error)=>{
+                alert(error.message)
+            })
+        }
+
+        render(){
+            return (
+                <table>
+                    <tbody>
+                        {this.state.cars.map((car,index)=>{
+                            return (
+                                <tr key={index}>
+                                    <th>{car.id}</th>
+                                    <th>{car.name}</th>
+                                    <th>{car.price}</th>
+                                </tr>
+                            )
+                        })}
+                    </tbody>
+                </table>
+            )
+        }
+    }
+    ReactDOM.render(<Table/>,document.getElementById('app01'))
+</script>
+
+<script type="text/babel">
+
+    class Table02 extends React.Component{
+
+        state = {
+            cars:[]
+        }
+
+        componentDidMount(){
+            var url = 'http://localhost:8090/react/getCar'
+            fetch(url).then((data)=>{
+                return data.json();
+            }).then((data)=>{
+                console.log(data)
+                var cars = data.data;
+                console.log(cars)
+                this.setState({cars})
+            }).catch((error)=>{
+                alert(error.message)
+            })
+            console.log(this.state.cars)
+        }
+
+        render(){
+            return (
+                <table>
+                    <tbody>
+                    {this.state.cars.map((car,index)=>{
+                        return (
+                            <tr key={index}>
+                                <th>{car.id}</th>
+                                <th>{car.name}</th>
+                                <th>{car.price}</th>
+                            </tr>
+                        )
+                    })}
+                    </tbody>
+                </table>
+            )
+        }
+    }
+    ReactDOM.render(<Table02/>,document.getElementById('app02'))
+</script>
+</html>

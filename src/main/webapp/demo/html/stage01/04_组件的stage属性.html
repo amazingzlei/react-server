@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>stage属性</title>
+</head>
+<body>
+    <div id="app01"></div>
+    <div id="app02"></div>
+    <div id="app03"></div>
+</body>
+<script type="text/javascript" src="../../common/js/react.development.js"></script>
+<script type="text/javascript" src="../../common/js/react-dom.development.js"></script>
+<script type="text/javascript" src="../../common/js/babel.min.js"></script>
+<script type="text/babel">
+    // 创建组件
+    class MyComponent extends React.Component{
+        // 构造器，用于状态的初始化，构造器中必须有super方法，否则报错
+        constructor(){
+            super()
+            // state是一个最想
+            this.state = {
+                flag: false
+            }
+
+            // 通过bind方法获取组件的上下文，即获取组件对象
+            this.changeState = this.changeState.bind(this)
+        }
+
+        changeState(){
+            this.setState({flag:!this.state.flag})
+        }
+
+        render(){
+            // 获取状态
+            // 点击时状态发生改变
+            return <h1 onClick={this.changeState}>{this.state.flag?'中国加油!':'武汉加油!'}</h1>
+        }
+    }
+
+    // 渲染数据
+    ReactDOM.render(<MyComponent/>, document.getElementById("app01"))
+
+
+    /**
+     * 注意：当我们自定义函数时，this并不是代表当前的组件对象，而是undefined，这时this会失去上下文
+     * 上述给出一种解决方案，即通过bind函数，任何时间我们都可以通过它来显式地指定函数的执行上下文
+     * bind 将指定的上下文与函数绑定后返回一个新的函数，这个新函数再拿去赋值或传参什么的都不会对其上下文产生影响了，
+     * 执行时始终是我们指定的那个。除此之外还有以下两种方式
+     */
+
+    // 方式二 调用方法时使用箭头函数
+    class MyComponent02 extends React.Component{
+        // 构造器，用于状态的初始化，构造器中必须有super方法，否则报错
+        constructor(){
+            super()
+            // state是一个最想
+            this.state = {
+                flag: false
+            }
+        }
+
+        changeState(){
+            this.setState({flag:!this.state.flag})
+        }
+
+        render(){
+            // 获取状态
+            // 点击时状态发生改变
+            return <h1 onClick={()=>this.changeState()}>{this.state.flag?'中国加油!':'武汉加油!'}</h1>
+        }
+    }
+
+    // 渲染数据
+    ReactDOM.render(<MyComponent02/>, document.getElementById("app02"))
+
+
+    // 方式三 将方法改为属性
+    class MyComponent03 extends React.Component{
+        // 构造器，用于状态的初始化，构造器中必须有super方法，否则报错
+        constructor(){
+            super()
+            // state是一个最想
+            this.state = {
+                flag: false
+            }
+        }
+
+        changeState = ()=>{
+            this.setState(currentState=>{
+                return {flag:!currentState.flag}
+            })
+        }
+
+        render(){
+            // 获取状态
+            // 点击时状态发生改变
+            return <h1 onClick={this.changeState}>{this.state.flag?'中国加油!':'武汉加油!'}</h1>
+        }
+    }
+
+    // 渲染数据
+    ReactDOM.render(<MyComponent03/>, document.getElementById("app03"))
+
+    /**
+     * 组件的状态总结:
+     * (1)在构造器中初始化状态
+     * (2)通过this.state.statePropertyName获取状态属性
+     * (3)通过setState(新状态)方法更新状态
+     * (4)注意状态一定是一个对象切记
+     */
+</script>
+</html>

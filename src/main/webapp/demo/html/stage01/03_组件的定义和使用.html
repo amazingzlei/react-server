@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>组件的定义和使用</title>
+    <style>
+        .app01{
+            color:red;
+        }
+        .app02{
+            color: pink;
+        }
+    </style>
+</head>
+<body>
+    <div id="app01"></div>
+    <div id="app02"></div>
+</body>
+<script type="text/javascript" src="../../common/js/react.development.js"></script>
+<script type="text/javascript" src="../../common/js/react-dom.development.js"></script>
+<script type="text/javascript" src="../../common/js/babel.min.js"></script>
+<script type="text/babel">
+    /**
+     * 第一种方式：通过工厂函数的方式创建组件，一般创建简单组件的时候使用
+     * 函数体内返回虚拟dom对象
+     * 注意:函数名的第一个字母不能小写，否则报错
+     */
+    function MyComponent01() {
+        return <h1 className="app01">中国加油！</h1>
+    }
+    // 渲染数据
+    ReactDOM.render(<MyComponent01 />, document.getElementById('app01'))
+
+    /**
+     * 第二种方式：通过es6类方式创建组件，一般创建复杂组件的时候使用
+     * 首先继承React.Component,然后重写render方法
+     * 注意:类名的第一个字母不能是小写
+     */
+    class MyComponent02 extends React.Component{
+        render(){
+            return <h1 className="app02">武汉加油！</h1>
+        }
+    }
+    // 渲染数据
+    ReactDOM.render(<MyComponent02 />, document.getElementById('app02'))
+</script>
+</html>
