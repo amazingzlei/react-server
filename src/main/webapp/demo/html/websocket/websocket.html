@@ -18,44 +18,50 @@
         // // 发送消息
         // socket.emit('sendMsg', {name: 'abc'})
         // console.log('客户端向服务器发消息', {name: 'abc'})
-        var ws = null;
-        if ('WebSocket' in window) {
-            ws = new WebSocket("ws://localhost:8090/react/webSocket/1");
-        }
-        /*
-         *监听三种状态的变化js会回调
-         */
-        ws.onopen = function (message) {
-        };
-        ws.onclose = function (message) {
-        };
-        //接受消息
-        ws.onmessage = function (ev) {
-            console.info(ev.data);
-        };
-        //监听窗口关闭事件，当窗口关闭时，主动去关闭websocket连接，防止连接还没断开就关闭窗口，server端会抛异常。
-        window.onbeforeunload = function () {
-            ws.close();
-        };
-
-        //关闭连接
-        function closeWebSocket() {
-            ws.close();
-        }
-        setTimeout(function () {
-            console.log('发送信息')
-            ws.send(JSON.stringify({'message':'来自1的信息','role':'2'}));
-        },2000)
+        // var ws = null;
+        // if ('WebSocket' in window) {
+        //     ws = new WebSocket("ws://localhost:8090/react/webSocket/1");
+        // }
+        // /*
+        //  *监听三种状态的变化js会回调
+        //  */
+        // ws.onopen = function (message) {
+        // };
+        // ws.onclose = function (message) {
+        // };
+        // //接受消息
+        // ws.onmessage = function (ev) {
+        //     console.info(ev.data);
+        // };
+        // //监听窗口关闭事件，当窗口关闭时，主动去关闭websocket连接，防止连接还没断开就关闭窗口，server端会抛异常。
+        // window.onbeforeunload = function () {
+        //     ws.close();
+        // };
+        //
+        // //关闭连接
+        // function closeWebSocket() {
+        //     ws.close();
+        // }
+        // setTimeout(function () {
+        //     console.log('发送信息')
+        //     ws.send(JSON.stringify({'message':'来自1的信息','role':'2'}));
+        // },2000)
     </script>
 
 <script>
-    // var a = [];
-    // for (let i = 0; i < 10; i++) {
-    //     a[i] = function () {
-    //         console.log(i);
-    //     };
-    // }
-    // a[0]()
+    var a = 0;
+
+    var a = function(){
+        var a = 1;
+        return
+        console.log(this.a)
+    }
+
+    function fun01(){
+        a
+    }
+    fun01();
+    console.log(a);
 
 </script>
 </body>
